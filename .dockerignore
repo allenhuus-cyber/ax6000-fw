@@ -1,0 +1,11 @@
+.build/
+.gocache/
+.gopath/
+dist/
+data/
+*.p8
+build.log
+.git/
+.gitignore
+.cloud/
+ios/
