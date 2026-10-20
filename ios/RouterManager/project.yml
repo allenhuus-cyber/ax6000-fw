@@ -1,0 +1,32 @@
+name: RouterManager
+
+options:
+  bundleIdPrefix: com.ax6000
+  deploymentTarget:
+    iOS: "16.0"
+  xcodeVersion: "15.0"
+
+settings:
+  base:
+    SWIFT_VERSION: "5.9"
+    TARGETED_DEVICE_FAMILY: "1,2"
+    ENABLE_PREVIEWS: YES
+
+targets:
+  RouterManager:
+    type: application
+    platform: iOS
+    sources:
+      - path: RouterManager
+        excludes:
+          - "**/*.md"
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.ax6000.RouterManager
+        CODE_SIGN_ENTITLEMENTS: RouterManager/RouterManager.entitlements
+        DEVELOPMENT_TEAM: "YOUR_TEAM_ID"
+        INFOPLIST_FILE: RouterManager/Info.plist
+        PRODUCT_NAME: RouterManager
+        ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
+    scheme:
+      testTargets: []
