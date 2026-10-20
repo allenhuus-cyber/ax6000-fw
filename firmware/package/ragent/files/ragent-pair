@@ -1,0 +1,30 @@
+#!/bin/sh
+# 生成配对二维码：把 device_id / secret 等信息编码成 PNG，供 iOS App 扫描。
+# 依赖 qrencode（已在 build/config/ax6000.seed 中开启）。
+set -e
+
+DATA_DIR="${DATA_DIR:-/etc/ragent}"
+OUT="${OUT:-/www/ragent-pair.png}"
+STATE="${DATA_DIR}/state.json"
+PORT=$(uci -q get ragent.main.listen | tr -d ':' || echo 8080)
+LAN=$(uci -q get network.lan.ipaddr || echo 192.168.1.1)
+NAME=$(uci -q get ragent.main.name || echo "Redmi AX6000")
+
+DEVICE_ID=$(jsonfilter -i "$STATE" -e '@.identity.device_id' 2>/dev/null || true)
+SECRET=$(jsonfilter -i "$STATE" -e '@.identity.secret' 2>/dev/null || true)
+
+if [ -z "$DEVICE_ID" ] || [ -z "$SECRET" ]; then
+    echo "尚未生成身份信息，请先启动 ragentd：/etc/init.d/ragentd start"
+    exit 1
+fi
+
+JSON=$(printf '{"device_id":"%s","secret":"%s","name":"%s","lan_addr":"%s","api_port":":%s","cloud":%s}' \
+    "$DEVICE_ID" "$SECRET" "$NAME" "$LAN" "$PORT" \
+    "$(uci -q get ragent.cloud.enabled || echo 0)")
+
+mkdir -p "$(dirname "$OUT")"
+echo "$JSON" | qrencode -o "$OUT" -s 8 -m 2
+
+echo "配对信息已生成: $OUT"
+echo "（或直接在 iOS App 中手动输入）"
+echo "$JSON"
