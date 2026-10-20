@@ -58,7 +58,8 @@ jobs:
             gettext git libncurses-dev libssl-dev python3 python3-distutils \
             python3-setuptools rsync swig unzip zlib1g-dev file wget curl \
             ca-certificates xz-utils zstd subversion qemu-utils ccache \
-            libelf-dev ecj fastjar java-properties-common
+            libelf-dev
+      # 注：ubuntu-22.04 没有 java-properties-common / ecj / fastjar，已移除
 
       - name: Setup Go
         uses: actions/setup-go@v5
