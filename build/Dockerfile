@@ -18,7 +18,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
         gettext git libncurses-dev libssl-dev python3 python3-distutils \
         python3-setuptools rsync swig unzip zlib1g-dev file wget curl \
         ca-certificates xz-utils zstd subversion qemu-utils ccache \
-        libelf-dev ecj fastjar java-properties-common \
+        libelf-dev \
     && rm -rf /var/lib/apt/lists/*
 
 # Go 1.22（交叉编译 ragentd 到 MT7986A / aarch64）
