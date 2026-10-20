@@ -1,0 +1,18 @@
+{
+  "listen": ":8443",
+  "data_dir": "/data",
+  "log_level": "info",
+  "rpc_timeout": 15,
+
+  "device_tokens": {},
+  "allow_auto_register": true,
+  "admin_token": "change-me",
+
+  "apns": {
+    "team_id": "ABCDE12345",
+    "key_id": "XYZ1234567",
+    "key_path": "/run/secrets/AuthKey_XYZ1234567.p8",
+    "topic": "com.ax6000.RouterManager",
+    "sandbox": false
+  }
+}
