@@ -1,0 +1,43 @@
+name: CI
+
+# 每次推送都做一次快速校验：Go 代码能否交叉编译通过（约 1~2 分钟）
+on:
+  push:
+    branches: [ "**" ]
+  pull_request:
+
+jobs:
+  verify:
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: "1.22"
+          cache: false
+
+      - name: Build router agent (linux/arm64)
+        run: |
+          mkdir -p dist
+          cd router-agent
+          GOOS=linux GOARCH=arm64 CGO_ENABLED=0 \
+            go build -trimpath -ldflags "-s -w" -o ../dist/ragentd ./cmd/ragentd
+
+      - name: Build cloud service
+        run: |
+          cd cloud
+          GOOS=linux GOARCH=amd64 CGO_ENABLED=0 \
+            go build -trimpath -ldflags "-s -w" -o ../dist/cloudsrv ./cmd/cloudsrv
+
+      - name: go vet
+        run: |
+          cd router-agent && go vet ./...
+          cd ../cloud && go vet ./...
+
+      - name: Upload binaries
+        uses: actions/upload-artifact@v4
+        with:
+          name: ragentd-arm64
+          path: dist/ragentd
