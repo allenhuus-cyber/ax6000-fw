@@ -1,0 +1,10 @@
+dist/
+.build/
+.gocache/
+.gopath/
+build.log
+data/
+*.p8
+.DS_Store
+ios/RouterManager/*.xcodeproj/
+ios/RouterManager/*.xcworkspace/
