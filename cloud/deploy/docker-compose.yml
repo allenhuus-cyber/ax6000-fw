@@ -1,0 +1,21 @@
+services:
+  cloudsrv:
+    build:
+      context: ../..
+      dockerfile: cloud/deploy/Dockerfile
+    image: ax6000/cloudsrv:latest
+    restart: unless-stopped
+    ports:
+      - "8443:8443"
+    volumes:
+      - ./config.json:/etc/ax6000-cloud/config.json:ro
+      - ./data:/data
+      - ./apns:/run/secrets:ro
+    environment:
+      TZ: Asia/Shanghai
+
+# 生产环境建议用 Nginx/Caddy 终止 TLS 后反代到 8443；
+# WebSocket 需要升级头：
+#   proxy_set_header Upgrade $http_upgrade;
+#   proxy_set_header Connection "upgrade";
+#   proxy_read_timeout 300s;
